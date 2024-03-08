@@ -8,10 +8,10 @@ Stage stage;
 void setup() {
   fullScreen();
   noCursor();
-  stage = new Stage(3, 3, 5);
+  stage = new Stage(4);
 }
 void reset() {
-  stage = new Stage(3, 3, 5);
+  stage = new Stage(4);
 }
 void render() {
   background(0);
