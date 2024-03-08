@@ -5,7 +5,7 @@ class Stage {
   final int ROWS = floor(displayHeight/TILE_SIZE);
   final int COLS = floor(displayWidth/TILE_SIZE);
   final double SPLIT_LARGER_QUADRANT_CHANCE = 0.7;
-  final double SPLIT_HORIZONTAL_CHANCE = 0.4;
+  final double SPLIT_HORIZONTAL_CHANCE = 0.5;
   final int MIN_HEIGHT = ROWS/6;
   final int MIN_WIDTH = COLS/8;
   ArrayList<Quadrant> quadrants = new ArrayList<Quadrant>();
@@ -57,7 +57,8 @@ class Stage {
       Collections.sort(quadrants);
     }
     while(quadrants.size() > numRooms) {
-      quadrants.remove((int)random(quadrants.size()));
+      //quadrants.remove((int)random(quadrants.size()));
+      quadrants.remove(0); // Remove smallest first
     }
     for(Quadrant quadrant: quadrants) {
       quadrant.debug();
@@ -80,8 +81,5 @@ class Stage {
         }
       }
     }
-    //for (Quadrant q: quadrants) {
-    //  q.draw();
-    //}
   }
 }
