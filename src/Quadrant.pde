@@ -1,4 +1,5 @@
 class Quadrant implements Comparable<Quadrant> {
+  final double HAZARD_CHANCE = 0.01;
   Stage stage;
   int x, y;
   int absoluteX, absoluteY;
@@ -55,16 +56,9 @@ class Quadrant implements Comparable<Quadrant> {
       for (int curY = y + marginHeight; curY < y + height - marginHeight; curY++) {
         Tile tile =  stage.grid[curY][curX];
         tile.setIsFloor(true);
+        if (random(101) <= HAZARD_CHANCE * 100) tile.hazard = new Hazard(tile);
         tiles.add(tile);
       }
     }
-    //placeRoom(x + marginWidth, y + marginHeight, width - marginWidth, height - marginHeight);
   }
-  //void placeRoom(int x, int y, int width, int height) { 
-  //  for (int curX = x; curX < x + width; curX++) {
-  //    for (int curY = y; curY < y + height; curY++) {
-  //      stage.grid[curY][curX].setIsFloor(true);
-  //    }
-  //  }
-  //}
 }

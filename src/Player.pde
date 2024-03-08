@@ -3,7 +3,6 @@ class Player {
   final int SIZE = 20;
   final color PRIMARY_COLOUR = #07D5DE;
   final int SPEED = 5;
-  Stage stage;
   int lives = 3; //TODO: lives
   PVector position = new PVector();
   PVector velocity = new PVector();
@@ -11,9 +10,6 @@ class Player {
   float bulletSpeed = 8f;
   int shootCooldown = 20;
   int curShootCooldown = 20;
-  Player(Stage stage) {
-    this.stage = stage;
-  }
   void reset() {
     lives = MAX_LIVES;
   }
@@ -24,7 +20,14 @@ class Player {
   void draw() {
     ArrayList<Bullet> removeBullets = new ArrayList<Bullet>();
     for (Bullet bullet: bullets) {
-      if (bullet.draw()) removeBullets.add(bullet);
+      Object collisionObject = bullet.draw();
+      if (collisionObject != null) {
+        removeBullets.add(bullet);
+        if (collisionObject instanceof Hazard) {
+          Hazard h = (Hazard)collisionObject;
+          h.destroy();
+        }
+      }
     }
     bullets.removeAll(removeBullets);
     PVector nextPos = new PVector(position.x, position.y);

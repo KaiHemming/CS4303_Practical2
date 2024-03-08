@@ -4,7 +4,7 @@ boolean hasStarted = false;
 //LoseScreen loseScreen = new LoseScreen();
 TitleScreen titleScreen = new TitleScreen();
 Stage stage;
-Player player;
+Player player = new Player();
 HUD hud;
 
 // Movement
@@ -23,15 +23,15 @@ void setup() {
   fullScreen();
   noCursor();
   stage = new Stage(8, 5);
-  player = new Player(stage);
   hud = new HUD(player);
   stage.placePlayer(player);
+  stage.spawnWave(3);
 }
 void reset() {
   stage = new Stage(10, 7);
-  player = new Player(stage);
   hud = new HUD(player);
   stage.placePlayer(player);
+  stage.spawnWave(3);
 }
 void render() {
   background(0);

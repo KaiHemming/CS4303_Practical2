@@ -8,7 +8,9 @@ class Stage {
   final double SPLIT_HORIZONTAL_CHANCE = 0.5;
   final int MIN_HEIGHT = ROWS/6;
   final int MIN_WIDTH = COLS/8;
+  Quadrant spawnQuadrant;
   ArrayList<Quadrant> quadrants = new ArrayList<Quadrant>();
+  ArrayList<Robot> robots = new ArrayList<Robot>();
   Tile[][] grid = new Tile[ROWS][COLS];
   
   Stage(int numSplits, int numRooms) {
@@ -64,13 +66,35 @@ class Stage {
       quadrant.debug();
       quadrant.placeRoom();
     }
+    Miner.dig(quadrants, this);
     print("done\n");
   }
   
   void placePlayer(Player player) {
-    Quadrant q = quadrants.get((int)random(quadrants.size()));
-    q.debug();
-    player.setPos(q.x*TILE_SIZE + q.width*TILE_SIZE/2, q.y*TILE_SIZE + q.height*TILE_SIZE/2);
+    spawnQuadrant = quadrants.get((int)random(quadrants.size()));
+    player.setPos(spawnQuadrant.x*TILE_SIZE + spawnQuadrant.width*TILE_SIZE/2, spawnQuadrant.y*TILE_SIZE + spawnQuadrant.height*TILE_SIZE/2);
+  }
+  
+  void placeRobot(Robot robot) {
+    Quadrant q = spawnQuadrant;
+    int x = q.x;
+    int y = q.y;
+    while (q == spawnQuadrant) {
+      q = quadrants.get((int)random(quadrants.size()));
+      Tile tile = q.tiles.get((int)random(q.tiles.size()));
+      x = tile.absoluteX + TILE_SIZE/2;
+      y = tile.absoluteY + TILE_SIZE/2;
+    }
+    robot.setPos(x, y);
+    print("placed robot x: " + x + ", y: " + y + "\n");
+  }
+  
+  void spawnWave(int numRobots) {
+    for (int i = 0; i < numRobots; i++) {
+      Robot robot = new Robot();
+      placeRobot(robot);
+      robots.add(robot);
+    }
   }
   
   void draw() {
@@ -80,6 +104,12 @@ class Stage {
           tile.draw();
         }
       }
+    }
+    for (Robot robot:robots) {
+      robot.draw();
+    }
+    for(Quadrant q:quadrants) {
+      q.draw();
     }
   }
 }

@@ -8,19 +8,21 @@ class Bullet {
     this.position = position.copy();
     this.velocity = velocity;
   }
-  boolean draw() {
-    if (hasCollided() != null) return true;
+  Object draw() {
     velocity.mult(DRAG_MODIFIER);
     position.add(velocity);
     fill(PRIMARY_COLOUR);
     circle(position.x, position.y, SIZE);
-    return false;
+    return hasCollided();
   }
   Object hasCollided() {
     int x = (int)position.x/stage.TILE_SIZE;
     int y = (int)position.y/stage.TILE_SIZE;
     if (!stage.grid[y][x].isFloor) {
       return stage.grid[y][x];
+    }
+    else if (stage.grid[y][x].isHazard()) {
+      return stage.grid[y][x].hazard;
     }
     return null;
   }
