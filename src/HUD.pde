@@ -1,10 +1,22 @@
 final class HUD {
   final int Y_PADDING = 5;
   final int FONT_SIZE = 64;
-  final color PRIMARY_COLOUR = #FFFFFF;
-  final color SECONDARY_COLOUR = #810000;
+  final color PRIMARY_COLOUR = #07D5DE;
+  int score; //TODO:
+  Player player;
   
+  HUD(Player player) {
+    this.player = player;
+  }
+  
+  // TODO: Draw lives and scoring
   void draw() {
-      
+      // Score and wave number
+    fill(PRIMARY_COLOUR);
+    textSize(FONT_SIZE);
+    textAlign(CENTER, TOP);
+    text(score, displayWidth/2, Y_PADDING);
+    textSize(FONT_SIZE/2);
+    text(player.lives + " lives", displayWidth/2, FONT_SIZE + Y_PADDING);
   }
 }
