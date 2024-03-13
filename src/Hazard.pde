@@ -1,11 +1,15 @@
 class Hazard {
-  final color COLOUR = #FFA005;
+  final int SCORE_VALUE = 5;
+  final color COLOUR = #FF6E1A;
   Tile tile;
   Hazard(Tile tile) {
     this.tile = tile;
-    tile.setColour(COLOUR);
+  }
+  void delete() {
+    tile.destroyHazard();
   }
   void destroy() {
-    tile.destroyHazard();
+    hud.score += SCORE_VALUE;
+    delete();
   }
 }

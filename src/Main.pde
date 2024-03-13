@@ -1,7 +1,8 @@
+final boolean DEBUG = true;
 // Game Elements
-boolean hasLost;
+boolean hasLost = false;
 boolean hasStarted = false;
-//LoseScreen loseScreen = new LoseScreen();
+LoseScreen loseScreen = new LoseScreen();
 TitleScreen titleScreen = new TitleScreen();
 Stage stage;
 Player player = new Player();
@@ -19,23 +20,35 @@ boolean isShootingRight = false;
 boolean isShootingUp = false;
 boolean isShootingDown = false;
 
+// Wave Data
+int INITIAL_NUM_HUMANS = 3;
+int INITIAL_NUM_ROBOTS = 7;
+int numHumans = 3;
+int numRobots = 7;
+
 void setup() {
   fullScreen();
   noCursor();
   stage = new Stage(8, 5);
   hud = new HUD(player);
   stage.placePlayer(player);
-  stage.spawnWave(3);
+  stage.spawnWave(3,3);
 }
 void reset() {
-  stage = new Stage(10, 7);
-  hud = new HUD(player);
+  numHumans = INITIAL_NUM_HUMANS;
+  numRobots = INITIAL_NUM_ROBOTS;
+  nextWave();
+  hud.reset();
   stage.placePlayer(player);
-  stage.spawnWave(3);
+}
+void nextWave() {
+  stage = new Stage(10, 7);
+  stage.placePlayer(player);
+  stage.spawnWave(numRobots, numHumans);
 }
 void render() {
   background(0);
-  stage.draw();
+  if (stage.draw()) nextWave();
   hud.draw();
   if (isMovingLeft) {
     player.moveLeft();
@@ -69,15 +82,15 @@ void render() {
 }
 // Render graphics
 void draw() {
-  //if (hasLost) {
-  //  loseScreen.draw();
-  //} else if (!hasStarted) {
-  //  titleScreen.draw();
-  //}
-  //else {
-  //  render();
-  //}
-  render();
+  if (hasLost) {
+    loseScreen.draw();
+  } else if (!hasStarted) {
+    titleScreen.draw();
+  }
+  else {
+    render();
+  }
+  //render();
 }
 void keyPressed() {
   if (key == CODED) {
@@ -143,7 +156,12 @@ void keyReleased() {
         isMovingRight = false;
         break;
       case ' ':
-        reset();
+        if (!hasStarted) {
+          hasStarted = true;
+        } else {
+          hasLost = false;
+          reset();
+        }
         break;
     }
   }

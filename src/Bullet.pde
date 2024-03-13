@@ -24,6 +24,9 @@ class Bullet {
     else if (stage.grid[y][x].isHazard()) {
       return stage.grid[y][x].hazard;
     }
+    for (Entity robot: stage.robots) {
+      if (robot.hasCollided(position)) return robot;
+    }
     return null;
   }
 }

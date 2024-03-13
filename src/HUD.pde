@@ -2,11 +2,16 @@ final class HUD {
   final int Y_PADDING = 5;
   final int FONT_SIZE = 64;
   final color PRIMARY_COLOUR = #07D5DE;
-  int score; //TODO:
+  int score; 
   Player player;
   
   HUD(Player player) {
     this.player = player;
+  }
+  
+  void reset() {
+    player.lives = player.MAX_LIVES;
+    score = 0;
   }
   
   // TODO: Draw lives and scoring

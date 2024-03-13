@@ -89,6 +89,19 @@ public class AStarSearch {
     return path ;
   }
   
+  // Used for debugging
+  private void printGraph() {
+    for (int row = 0; row < graph.length; row++) {
+      for (int col = 0; col < graph[row].length; col++) {
+        if (graph[row][col] != null)
+          System.out.print("_");
+        else 
+          System.out.print("x");
+      }
+      System.out.println();
+    } 
+  }
+  
   // Start the A* search for a path between the specified points
   public ArrayList<AStarNode> search(int sourceRow, int sourceCol, int goalRow, int goalCol) {
     reset() ;

@@ -1,4 +1,5 @@
 class Quadrant implements Comparable<Quadrant> {
+  boolean spawnedHuman = false;
   final double HAZARD_CHANCE = 0.01;
   Stage stage;
   int x, y;
@@ -29,12 +30,7 @@ class Quadrant implements Comparable<Quadrant> {
     print("x: " + x + ", y: " + y + ", width: " + width + ", height: " + height + "\n");
   }
   void draw() {
-    fill(colour,100);
-    rect(absoluteX, absoluteY, width * stage.TILE_SIZE, height * stage.TILE_SIZE);
     fill(0);
-    //textAlign(CENTER, CENTER);
-    //textSize(20);
-    //text("width " + width + " height " + height, x + width/2, y + height/2);
   }
   Quadrant splitHorizontal() {
     int newWidth = width/2;
@@ -55,10 +51,20 @@ class Quadrant implements Comparable<Quadrant> {
     for (int curX = x + marginWidth; curX < x + width - marginWidth; curX++) {
       for (int curY = y + marginHeight; curY < y + height - marginHeight; curY++) {
         Tile tile =  stage.grid[curY][curX];
-        tile.setIsFloor(true);
+        tile.setIsFloor(true, this);
         if (random(101) <= HAZARD_CHANCE * 100) tile.hazard = new Hazard(tile);
         tiles.add(tile);
       }
     }
+  }
+  boolean isInQuadrant(PVector position) {
+    System.out.println("posX: " + position.x + ", posY: " + position.y + ", absoluteX: " + absoluteX + ", absoluteY: " + absoluteY + ", height: " + height + ", width: " + width);
+    if (position.x >= absoluteX & position.x <= absoluteX + width*stage.TILE_SIZE) {
+      if (position.y >= absoluteY & position.y <= absoluteY + height*stage.TILE_SIZE) {
+        System.out.println("True!");
+        return true;
+      }
+    }
+    return false;
   }
 }

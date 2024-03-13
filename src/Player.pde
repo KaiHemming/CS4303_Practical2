@@ -2,7 +2,10 @@ class Player {
   final int MAX_LIVES = 3;
   final int SIZE = 20;
   final color PRIMARY_COLOUR = #07D5DE;
-  final int SPEED = 5;
+  final color SECONDARY_COLOUR = #B2B0B0;
+  final int SPEED = 3;
+  int invincibilityTime = 100;
+  int invincibilityTimer = 0;
   int lives = 3; //TODO: lives
   PVector position = new PVector();
   PVector velocity = new PVector();
@@ -27,6 +30,9 @@ class Player {
           Hazard h = (Hazard)collisionObject;
           h.destroy();
         }
+        if (collisionObject instanceof Entity) {
+          ((Entity)collisionObject).destroy();
+        }
       }
     }
     bullets.removeAll(removeBullets);
@@ -36,10 +42,15 @@ class Player {
       position = nextPos;
     }
     velocity.mult(0);
-    fill(PRIMARY_COLOUR);
+    if (invincibilityTimer > 0) {
+      fill(SECONDARY_COLOUR);
+    } else {
+      fill(PRIMARY_COLOUR);
+    }
     circle(position.x, position.y, SIZE);
     
     if (curShootCooldown > 0) curShootCooldown--;
+    if (invincibilityTimer > 0) invincibilityTimer--;
   }
   void moveUp() {
     velocity.y -= SPEED;
@@ -56,15 +67,32 @@ class Player {
   boolean isWalkable(PVector pos) {
     int x = (int)pos.x/stage.TILE_SIZE;
     int y = (int)pos.y/stage.TILE_SIZE;
+    if (stage.grid[y][x].hazard != null) {
+      if (takeDamage()) stage.grid[y][x].hazard.delete();
+    }
     if (stage.grid[y][x].isFloor) {
       return true;
     }
     return false;
+  }
+  int[] getTilePos() {
+    return new int[] {(int)position.x/stage.TILE_SIZE,(int)position.y/stage.TILE_SIZE};
   }
   void shoot(PVector direction) {
     if (curShootCooldown > 0) return;
     Bullet bullet = new Bullet(position, new PVector(direction.x*bulletSpeed, direction.y*bulletSpeed));
     bullets.add(bullet);
     curShootCooldown = shootCooldown;
+  }
+  boolean takeDamage() {
+    if (invincibilityTimer <= 0) {
+      lives--;
+      if (lives <= 0) {
+        hasLost = true;
+      }
+      invincibilityTimer = invincibilityTime;
+      return true;
+    }
+    return false;
   }
 }
