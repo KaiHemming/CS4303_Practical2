@@ -1,13 +1,7 @@
 final class Miner {
   ArrayList<Corridor> dig(ArrayList<Quadrant> quadrants, Stage stage) {
     ArrayList<Corridor> halls = new ArrayList<Corridor>();
-    //IntList indexes = new IntList();
-    //for (int i = 0; i < quadrants.size(); i++) {
-    //  indexes.append(i);
-    //}
-    //indexes.shuffle();
-    //for (int index:indexes) {
-    //}
+   
     for (int i = 0; i < quadrants.size(); i++) {
       Quadrant startQuadrant = quadrants.get(i);
       Quadrant goalQuadrant;
@@ -18,11 +12,7 @@ final class Miner {
       } else {
         goalQuadrant = quadrants.get(i+1);
       }
-      //if ((int)random(0,2) == 0) {
-      //  tileClassifications = startQuadrant;
-      //} else {
-      //  tileClassifications = goalQuadrant;
-      //}
+
       int startX = startQuadrant.x + startQuadrant.width/2;
       int startY = startQuadrant.y + startQuadrant.height/2;
       int goalX = goalQuadrant.x + goalQuadrant.width/2;

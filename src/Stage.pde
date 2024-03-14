@@ -13,10 +13,12 @@ class Stage {
   ArrayList<Quadrant> quadrants = new ArrayList<Quadrant>();
   ArrayList<Corridor> halls = new ArrayList<Corridor>();
   ArrayList<Entity> robots = new ArrayList<Entity>();
+  ArrayList<Entity> addRobots = new ArrayList<Entity>();
   ArrayList<Human> humans = new ArrayList<Human>();
   Tile[][] grid = new Tile[ROWS][COLS];
   
-  Stage(int numSplits, int numRooms) {
+  // powerUpChance is checked per room
+  Stage(int numSplits, int numRooms, double powerUpChance) {
     print("rows: " + ROWS + ", cols: " + COLS + "\n");
     print("minheight: " + MIN_HEIGHT + ", minwidth: " + MIN_WIDTH + "\n");
     for (int r = 0; r < ROWS; r++ ) {
@@ -67,64 +69,79 @@ class Stage {
     for(Quadrant quadrant: quadrants) {
       quadrant.debug();
       quadrant.placeRoom();
+      if (random(0,101) < 100 * powerUpChance) {
+        quadrant.placePowerUp();
+      }
     }
     System.out.println(quadrants);
     halls = miner.dig(quadrants, this);
+    placePlayer(player);
     print("done\n");
   }
   
   void placePlayer(Player player) {
+    player.invincibilityTimer = player.invincibilityTime;
     spawnQuadrant = quadrants.get((int)random(quadrants.size()));
     player.setPos(spawnQuadrant.x*TILE_SIZE + spawnQuadrant.width*TILE_SIZE/2, spawnQuadrant.y*TILE_SIZE + spawnQuadrant.height*TILE_SIZE/2);
   }
   
   // TODO: Spawns in spawn quadrant!
-  void place(Entity entity) {
+  void placeEntity(Entity entity) {
     Quadrant q = spawnQuadrant;
     int x = 0;
     int y = 0;
     while (q == spawnQuadrant) {
       q = quadrants.get((int)random(quadrants.size()));
-      System.out.println(spawnQuadrant);
-      System.out.println(q);
-      System.out.println(q == spawnQuadrant);
     }
+    //Quadrant q = spawnZones.get((int)random(spawnZones.size()));
     Tile tile = q.tiles.get((int)random(q.tiles.size()));
     x = tile.absoluteX + TILE_SIZE/2;
     y = tile.absoluteY + TILE_SIZE/2;
     entity.setPos(x, y);
-    print("placed robot x: " + x + ", y: " + y + "\n");
+    print("placed " + entity +" x: " + x + ", y: " + y + "\n");
   }
   
-  void place(Human human) {
-    Quadrant q = quadrants.get((int)random(quadrants.size()));
-    Tile tile = q.tiles.get((int)random(q.tiles.size()));
-    int x = tile.absoluteX + TILE_SIZE/2;
-    int y = tile.absoluteY + TILE_SIZE/2;
-    human.setPos(x, y);
-    q.spawnedHuman = true;
-    print("placed human x: " + x + ", y: " + y + "\n");
+  void addEntity(Entity entity) {
+    addRobots.add(entity);
   }
   
-  void removeRobot(Entity robot) {
-    robots.remove(robot);
+  void removeEntity(Entity entity) {
+    robots.remove(entity);
   }
   
-  void spawnWave(int numRobots, int numHumans) {
+  void spawnWave(int numRobots, int numHumans, int numHunters, int numInfectious) {
     for (int i = 0; i < numRobots; i++) {
       Entity robot = new Entity();
-      place(robot);
+      placeEntity(robot);
       robots.add(robot);
     }
+    for (int i = 0; i < numHunters; i++) {
+      Hunter hunter = new Hunter();
+      placeEntity(hunter);
+      robots.add(hunter);
+    }
+    for (int i = 0; i < numInfectious; i++) {
+      Infectious infectious = new Infectious();
+      placeEntity(infectious);
+      robots.add(infectious);
+    }
     for (int i = 0; i < numHumans; i++) {
-      Human human = new Human();
-      place(human);
+      int type = int(random(0,3));
+      Human human;
+      if (type == 0) {
+        human = new Human();
+      } else if (type == 1) {
+        human = new Child();
+      } else {
+        human = new Teen();
+      }
+      placeEntity(human);
       humans.add(human);
     }
   }
   
   boolean draw() {
-    if (humans.isEmpty()) {
+    if (robots.isEmpty()) {
       return true;
     }
     for (Tile[] row: grid) {
@@ -134,6 +151,7 @@ class Stage {
         }
       }
     }
+    // Remove robots
     ArrayList<Entity> removeRobots = new ArrayList<Entity>();
     for (Entity robot:robots) {
       robot.draw();
@@ -142,11 +160,19 @@ class Stage {
       }
     }
     robots.removeAll(removeRobots);
+    // Add robots
+    for (Entity robot:addRobots) {
+      robots.add(robot);
+    }
+    addRobots.clear();
     ArrayList<Human> removeHumans = new ArrayList<Human>();
     for (Human human:humans) {
       human.draw();
       if (human.isRescued) {
-        hud.score += human.SCORE_VALUE;
+        hud.score += human.scoreValue;
+        removeHumans.add(human);
+      }
+      if (human.isDead) {
         removeHumans.add(human);
       }
     }

@@ -10,7 +10,7 @@ final class HUD {
   }
   
   void reset() {
-    player.lives = player.MAX_LIVES;
+    player.lives = player.LIVES;
     score = 0;
   }
   
@@ -22,6 +22,10 @@ final class HUD {
     textAlign(CENTER, TOP);
     text(score, displayWidth/2, Y_PADDING);
     textSize(FONT_SIZE/2);
-    text(player.lives + " lives", displayWidth/2, FONT_SIZE + Y_PADDING);
+    if (player.lives > 1) {
+      text(player.lives + " Lives", displayWidth/2, FONT_SIZE + Y_PADDING);
+    } else {
+      text(player.lives + " Life Remaining!", displayWidth/2, FONT_SIZE + Y_PADDING);
+    }
   }
 }

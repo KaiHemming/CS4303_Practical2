@@ -12,7 +12,8 @@ public class AStarSearch {
     for (int row = 0; row < grid.length; row++) {
       graph[row] = new AStarNode[grid[row].length] ;
       for (int col = 0; col < grid[row].length; col++) {
-        if (grid[row][col].isFloor)
+        //if (grid[row][col].isFloor)
+        if (grid[row][col].isFloor & grid[row][col].hazard == null)
           graph[row][col] = new AStarNode(row, col) ;
         else 
           graph[row][col] = null ;

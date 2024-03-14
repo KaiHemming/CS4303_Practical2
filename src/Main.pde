@@ -1,4 +1,4 @@
-final boolean DEBUG = true;
+final boolean DEBUG = false;
 // Game Elements
 boolean hasLost = false;
 boolean hasStarted = false;
@@ -21,30 +21,35 @@ boolean isShootingUp = false;
 boolean isShootingDown = false;
 
 // Wave Data
-int INITIAL_NUM_HUMANS = 3;
-int INITIAL_NUM_ROBOTS = 7;
-int numHumans = 3;
-int numRobots = 7;
+int numHumans = 1;
+int numRobots = 2;
+int numHunters = 1;
+int numInfectious = 1;
+int INITIAL_NUM_HUMANS = numHumans;
+int INITIAL_NUM_ROBOTS = numRobots;
+int INITIAL_NUM_HUNTERS = numHunters;
+int INITIAL_NUM_INFECTIOUS = numInfectious;
+double powerUpChance = 0.3;
 
 void setup() {
   fullScreen();
   noCursor();
-  stage = new Stage(8, 5);
+  stage = new Stage(8, 5, powerUpChance);
   hud = new HUD(player);
-  stage.placePlayer(player);
-  stage.spawnWave(3,3);
+  stage.spawnWave(numRobots, numHumans, numHunters, numInfectious);
 }
 void reset() {
   numHumans = INITIAL_NUM_HUMANS;
   numRobots = INITIAL_NUM_ROBOTS;
-  nextWave();
+  numHunters = INITIAL_NUM_HUNTERS;
+  numInfectious = INITIAL_NUM_INFECTIOUS;
   hud.reset();
-  stage.placePlayer(player);
+  player.reset();
+  nextWave();
 }
 void nextWave() {
-  stage = new Stage(10, 7);
-  stage.placePlayer(player);
-  stage.spawnWave(numRobots, numHumans);
+  stage = new Stage(10, 7, powerUpChance);
+  stage.spawnWave(numRobots, numHumans, numHunters, numInfectious);
 }
 void render() {
   background(0);

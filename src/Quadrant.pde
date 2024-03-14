@@ -1,6 +1,6 @@
 class Quadrant implements Comparable<Quadrant> {
   boolean spawnedHuman = false;
-  final double HAZARD_CHANCE = 0.01;
+  final double HAZARD_CHANCE = 0.005;
   Stage stage;
   int x, y;
   int absoluteX, absoluteY;
@@ -29,9 +29,11 @@ class Quadrant implements Comparable<Quadrant> {
   void debug() {
     print("x: " + x + ", y: " + y + ", width: " + width + ", height: " + height + "\n");
   }
-  void draw() {
-    fill(0);
-  }
+  //void draw() {
+  //  if (player.exploredQuadrants.contains(this)) {
+  //    fill(0);
+  //  }
+  //}
   Quadrant splitHorizontal() {
     int newWidth = width/2;
     this.width = newWidth;
@@ -61,10 +63,13 @@ class Quadrant implements Comparable<Quadrant> {
     System.out.println("posX: " + position.x + ", posY: " + position.y + ", absoluteX: " + absoluteX + ", absoluteY: " + absoluteY + ", height: " + height + ", width: " + width);
     if (position.x >= absoluteX & position.x <= absoluteX + width*stage.TILE_SIZE) {
       if (position.y >= absoluteY & position.y <= absoluteY + height*stage.TILE_SIZE) {
-        System.out.println("True!");
         return true;
       }
     }
     return false;
+  }
+  void placePowerUp() {
+    Tile t = tiles.get((int)random(0,tiles.size()));
+    t.powerUp = new PowerUp(t.absoluteX, t.absoluteY, t);
   }
 }

@@ -1,20 +1,24 @@
 class Player {
-  final int MAX_LIVES = 3;
+  final int LIVES = 1;
   final int SIZE = 20;
   final color PRIMARY_COLOUR = #07D5DE;
   final color SECONDARY_COLOUR = #B2B0B0;
   final int SPEED = 3;
   int invincibilityTime = 100;
   int invincibilityTimer = 0;
-  int lives = 3; //TODO: lives
+  int lives = 1; //TODO: lives
   PVector position = new PVector();
   PVector velocity = new PVector();
   ArrayList<Bullet> bullets = new ArrayList<Bullet>();
+  ArrayList<Quadrant> exploredQuadrants = new ArrayList<Quadrant>();
+  ArrayList<Corridor> exploredCorridors = new ArrayList<Corridor>();
   float bulletSpeed = 8f;
   int shootCooldown = 20;
   int curShootCooldown = 20;
   void reset() {
-    lives = MAX_LIVES;
+    lives = LIVES;
+    exploredQuadrants.clear();
+    exploredCorridors.clear();
   }
   void setPos(int x, int y) {
     position.x = x;
@@ -47,6 +51,7 @@ class Player {
     } else {
       fill(PRIMARY_COLOUR);
     }
+    stroke(1);
     circle(position.x, position.y, SIZE);
     
     if (curShootCooldown > 0) curShootCooldown--;
@@ -71,6 +76,19 @@ class Player {
       if (takeDamage()) stage.grid[y][x].hazard.delete();
     }
     if (stage.grid[y][x].isFloor) {
+      if (stage.grid[y][x].quadrant != null) {
+        if (!exploredQuadrants.contains(stage.grid[y][x].quadrant)) exploredQuadrants.add(stage.grid[y][x].quadrant);
+      }
+      if (stage.grid[y][x].corridors.size() != 0) {
+        for (Corridor c: stage.grid[y][x].corridors) {
+          exploredCorridors.add(c);
+        }
+      }
+      if (stage.grid[y][x].powerUp != null) {
+        if (stage.grid[y][x].powerUp.isUsed == false) {
+          stage.grid[y][x].powerUp.effect();
+        }
+      }
       return true;
     }
     return false;

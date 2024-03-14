@@ -1,6 +1,6 @@
 class Hazard {
-  final int SCORE_VALUE = 5;
-  final color COLOUR = #FF6E1A;
+  final int SCORE_VALUE = 0;
+  final color COLOUR = #FF0505;
   Tile tile;
   Hazard(Tile tile) {
     this.tile = tile;

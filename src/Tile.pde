@@ -7,6 +7,7 @@ class Tile {
   int size;
   color colour = DEFAULT_COLOUR;
   boolean isFloor = false;
+  PowerUp powerUp;
   Hazard hazard;
   
   Tile(int x, int y, int size) {
@@ -40,16 +41,35 @@ class Tile {
     return true;
   }
   void draw() {
+    noFill();
     if (isFloor) {
-      fill(colour);
-    } else {
-      noFill();
-    }
+      if (player.exploredQuadrants.contains(quadrant)) {
+        if (quadrant == stage.spawnQuadrant) {
+          fill(#86FFA7);
+        } else fill(colour);
+      }
+      else {
+        fill(colour,100);
+      }
+      for (Corridor c: corridors) {
+        if (player.exploredCorridors.contains(c)) {
+          fill(colour);
+        }
+        else {
+          fill(colour,100);
+        }
+      }
+    } 
     if (hazard != null) {
       fill(hazard.COLOUR);
     }
     stroke(0,30);
     rect(absoluteX, absoluteY, size, size);
+    if (powerUp != null) {
+      if (powerUp.isUsed == false) {
+        powerUp.draw();
+      }
+    }
     if (DEBUG) {
       if (quadrant != null) {
         fill(quadrant.colour,100);
