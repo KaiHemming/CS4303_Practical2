@@ -2,6 +2,7 @@
 class Hunter extends Entity {
   final color PRIMARY_COLOUR = #FC8208;
   final int VISION_TIME = 1;
+  boolean isTargetingPlayer = false;
   
   Hunter() {
     super();
@@ -27,7 +28,7 @@ class Hunter extends Entity {
   }
   
   void onTargetCollision() {
-    if (stage.humans.isEmpty()) {
+    if (isTargetingPlayer) {
       super.onTargetCollision();
     }
     for (Human h:stage.humans) {

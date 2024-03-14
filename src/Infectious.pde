@@ -9,7 +9,7 @@ class Infectious extends Hunter {
   }
   
   void onTargetCollision() {
-    if (stage.humans.isEmpty()) {
+    if (isTargetingPlayer) {
       super.onTargetCollision();
     }
     for (Human h:stage.humans) {

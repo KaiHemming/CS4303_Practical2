@@ -1,6 +1,6 @@
 class Entity {
   final int VISION_DIST = 8;
-  final int REACTION_SPEED = 3;
+  final int SEARCH_UPDATE_SPEED = 2;
   final int VISION_TIME = 300;
   float orientation = random(0,360);
   Tile patrolTarget;
@@ -15,7 +15,7 @@ class Entity {
   PVector velocity = new PVector();
   AStarSearch pathFinder = new AStarSearch(stage.grid);
   ArrayList<AStarNode> path;
-  int pathFindingCountDown = REACTION_SPEED;
+  int pathFindingCountDown = SEARCH_UPDATE_SPEED;
   int visionCountDown;
   
   void setPos(int x, int y) {
@@ -45,7 +45,7 @@ class Entity {
       } else {
         path = null;
       }
-      pathFindingCountDown = REACTION_SPEED;
+      pathFindingCountDown = SEARCH_UPDATE_SPEED;
     }
     if (DEBUG) {
       if (path != null) {
@@ -206,6 +206,7 @@ class Entity {
   
   void onTargetCollision() {
     if (player.takeDamage()) {
+      System.out.println("HIT!");
       destroy();
     }
   }

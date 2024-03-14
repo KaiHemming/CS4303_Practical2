@@ -14,5 +14,7 @@ final class LoseScreen {
     textAlign(CENTER, BOTTOM);
     textSize(FONT_SIZE/2);
     text(instruction, displayWidth/2, displayHeight/2 + FONT_SIZE + Y_PADDING);
+    textAlign(CENTER, TOP);
+    text(hud.score, displayWidth/2, Y_PADDING);
   }
 }

@@ -1,9 +1,10 @@
 class Child extends Human {
-  int size = 10;
-  int scoreValue = 30;
+  final int SIZE = 12;
+  final int SCORE_VALUE = 30;
   
-  //void render() {
-  //  fill(primaryColour);
-  //  circle(position.x, position.y, SIZE);
-  //}
+  Child() {
+    super();
+    this.size = SIZE;
+    this.scoreValue = SCORE_VALUE;
+  }
 }

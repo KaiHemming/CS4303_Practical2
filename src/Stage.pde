@@ -9,6 +9,8 @@ class Stage {
   final double SPLIT_HORIZONTAL_CHANCE = 0.5;
   final int MIN_HEIGHT = ROWS/6;
   final int MIN_WIDTH = COLS/8;
+  final int CHANGE_TARGET_TIME = 10;
+  int changeTargetTimer = CHANGE_TARGET_TIME;
   Quadrant spawnQuadrant;
   ArrayList<Quadrant> quadrants = new ArrayList<Quadrant>();
   ArrayList<Corridor> halls = new ArrayList<Corridor>();
@@ -177,6 +179,17 @@ class Stage {
       }
     }
     humans.removeAll(removeHumans);
+    if (changeTargetTimer == 0) {
+      for (Entity e:robots) {
+        if (e instanceof Hunter) {
+          ((Hunter)e).isTargetingPlayer = true;
+        }
+      }
+    } else {
+      if (humans.size() == 0) {
+        changeTargetTimer--;
+      }
+    }
     return false;
   }
 }

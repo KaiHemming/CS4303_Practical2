@@ -15,5 +15,6 @@ final class TitleScreen {
     textAlign(CENTER, BOTTOM);
     textSize(FONT_SIZE/2);
     text(instruction, displayWidth/2, displayHeight/2 + FONT_SIZE + Y_PADDING);
+    
   }
 }
