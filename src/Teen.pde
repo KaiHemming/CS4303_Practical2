@@ -1,6 +1,6 @@
 class Teen extends Human {
   final int SIZE = displayHeight/70;
-  final int SCORE_VALUE = 20;
+  final int SCORE_VALUE = 15;
   
   Teen() {
     super();

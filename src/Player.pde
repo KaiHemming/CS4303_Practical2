@@ -13,7 +13,7 @@ class Player {
   ArrayList<Quadrant> exploredQuadrants = new ArrayList<Quadrant>();
   ArrayList<Corridor> exploredCorridors = new ArrayList<Corridor>();
   float bulletSpeed = 8f;
-  int shootCooldown = 50;
+  int shootCooldown = 30;
   int curShootCooldown = 0;
   void reset() {
     lives = LIVES;

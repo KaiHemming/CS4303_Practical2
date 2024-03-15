@@ -1,3 +1,4 @@
+// From Tutorial code with some edits to integrate with my program.
 import java.util.Collections ;
 
 public class AStarSearch {
@@ -7,12 +8,12 @@ public class AStarSearch {
   private ArrayList<AStarNode>open ;
   
   // The constructor takes in the game map and builds the graph
-  public AStarSearch(Tile[][] grid) {
+  public AStarSearch(Tile[][] grid) { // 200022530: Takes Tile[][] grid parameter
     graph = new AStarNode[grid.length][] ;
     for (int row = 0; row < grid.length; row++) {
       graph[row] = new AStarNode[grid[row].length] ;
       for (int col = 0; col < grid[row].length; col++) {
-        //if (grid[row][col].isFloor)
+        // 200022530: Only add to search if floor and not hazard.
         if (grid[row][col].isFloor & grid[row][col].hazard == null)
           graph[row][col] = new AStarNode(row, col) ;
         else 

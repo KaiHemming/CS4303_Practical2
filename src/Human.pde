@@ -24,11 +24,11 @@ class Human extends Entity {
   }
   
   void render() {
-    strokeWeight(3);
+    strokeWeight(2);
     if (flee) {
       stroke(#FF0000);
     } else {
-      stroke(255);
+      stroke(#86FFA7);
     }
     fill(primaryColour);
     circle(position.x, position.y, size);

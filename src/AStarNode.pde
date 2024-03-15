@@ -1,3 +1,4 @@
+// From Tutorial code
 public class AStarNode implements Comparable<AStarNode> {
   // The cost of shortest path found so far to here, and the estimate to the goal
   private int cost = 0, estimate = 0;

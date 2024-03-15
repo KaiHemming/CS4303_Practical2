@@ -29,11 +29,12 @@ class Quadrant implements Comparable<Quadrant> {
   void debug() {
     print("x: " + x + ", y: " + y + ", width: " + width + ", height: " + height + "\n");
   }
-  //void draw() {
-  //  if (player.exploredQuadrants.contains(this)) {
-  //    fill(0);
-  //  }
-  //}
+  void draw() {
+    noFill();
+    stroke(255,100);
+    rect(absoluteX, absoluteY, width*stage.TILE_SIZE, height*stage.TILE_SIZE);
+    noStroke();
+  }
   Quadrant splitHorizontal() {
     int newWidth = width/2;
     this.width = newWidth;

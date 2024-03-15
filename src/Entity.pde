@@ -3,7 +3,6 @@ class Entity {
   final int SEARCH_UPDATE_SPEED = 2;
   final int VISION_TIME = 300;
   float orientation = random(0,360);
-  Tile patrolTarget;
   int scoreValue = 1;
   color primaryColour = #FF0000;
   int size = displayHeight/52;

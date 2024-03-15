@@ -1,5 +1,5 @@
 class Bullet {
-  final float DRAG_MODIFIER = 0.995;
+  final float DRAG_MODIFIER = 0.9995;
   final color PRIMARY_COLOUR = #FF0000;
   final int SIZE = 10;
   PVector position;

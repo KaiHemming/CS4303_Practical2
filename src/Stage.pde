@@ -195,6 +195,11 @@ class Stage {
         changeTargetTimer--;
       }
     }
+    if (DEBUG) {
+      for (Quadrant q: quadrants) {
+        q.draw();
+      }
+    }
     return false;
   }
 }

@@ -1,4 +1,5 @@
-final boolean DEBUG = false; // Set to true for debug mode, draws paths and areas, allows reset with spacebar
+// Set to true for debug mode, draws paths and areas, allows reset with spacebar
+final boolean DEBUG = false;
 // Game Elements
 boolean hasLost = false;
 boolean hasStarted = false;
@@ -40,6 +41,7 @@ void setup() {
   hud = new HUD(player);
   stage.spawnWave(numRobots, numHumans, numHunters, numInfectious);
 }
+// Resets game
 void reset() {
   numHumans = INITIAL_NUM_HUMANS;
   numRobots = INITIAL_NUM_ROBOTS;
@@ -50,6 +52,7 @@ void reset() {
   player.reset();
   nextWave();
 }
+// Spawns next wave and regenerates stage.
 void nextWave() {
   player.bullets.clear();
   waveNumber++;
@@ -63,6 +66,7 @@ void nextWave() {
   stage.spawnWave(numRobots, numHumans, numHunters, numInfectious);
   hud.indicateWaveEnd("Wave " + waveNumber);
 }
+// Handle movement and draw game
 void render() {
   background(0);
   if (stage.draw()) nextWave();
@@ -108,6 +112,7 @@ void draw() {
     render();
   }
 }
+// Manage key press
 void keyPressed() {
   if (key == CODED) {
     switch(keyCode) {
@@ -141,6 +146,7 @@ void keyPressed() {
     }
   }
 }
+// Manage key press
 void keyReleased() {
   if (key == CODED) {
     switch(keyCode) {
