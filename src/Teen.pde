@@ -1,5 +1,5 @@
 class Teen extends Human {
-  final int SIZE = 15;
+  final int SIZE = displayHeight/70;
   final int SCORE_VALUE = 20;
   
   Teen() {

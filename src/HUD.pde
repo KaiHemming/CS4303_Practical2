@@ -2,6 +2,9 @@ final class HUD {
   final int Y_PADDING = 5;
   final int FONT_SIZE = 64;
   final color PRIMARY_COLOUR = #07D5DE;
+  final int WAVE_INDICATOR_TIME = 300;
+  int waveIndicatorTime = 0;
+  String waveMessage;
   int score; 
   Player player;
   
@@ -10,7 +13,6 @@ final class HUD {
   }
   
   void reset() {
-    player.lives = player.LIVES;
     score = 0;
   }
   
@@ -27,5 +29,19 @@ final class HUD {
     } else {
       text(player.lives + " Life Remaining!", displayWidth/2, FONT_SIZE + Y_PADDING);
     }
+    if (waveIndicatorTime > 0) {
+      fill(PRIMARY_COLOUR, 80);
+      textSize(FONT_SIZE*2);
+      textAlign(CENTER, CENTER);
+      text(waveMessage, displayWidth/2, displayHeight/2);
+      waveIndicatorTime--;
+    }
+  }
+  
+  // Starts wave indicator timer and changes message to be displayed.
+  // Added after first playtest.
+  void indicateWaveEnd(String waveMessage) {
+    this.waveMessage = waveMessage;
+    waveIndicatorTime = WAVE_INDICATOR_TIME;
   }
 }

@@ -1,5 +1,5 @@
 class Child extends Human {
-  final int SIZE = 12;
+  final int SIZE = displayHeight/100; //12
   final int SCORE_VALUE = 30;
   
   Child() {

@@ -16,10 +16,24 @@ class Human extends Entity {
   // TODO: Flee
   void patrol() {
     if (flee()) {
-      
+      flee = true;
     } else {
+      flee = false;
       super.patrol();
     }
+  }
+  
+  void render() {
+    strokeWeight(3);
+    if (flee) {
+      stroke(#FF0000);
+    } else {
+      stroke(255);
+    }
+    fill(primaryColour);
+    circle(position.x, position.y, size);
+    strokeWeight(1);
+    noStroke();
   }
   
   int[] getFleeTargetCoords() {
@@ -44,7 +58,14 @@ class Human extends Entity {
     int[] curCoords = getTilePos();
     int[] targetCoords = getFleeTargetCoords();
     if (targetCoords == null) return false;
-    fleePath = fleePathFinder.search(curCoords[1], curCoords[0], targetCoords[1], targetCoords[0]);
+    fleePath = null;
+    try {
+      fleePath = fleePathFinder.search(curCoords[1], curCoords[0], targetCoords[1], targetCoords[0]);
+    } catch (NullPointerException e) {
+      System.out.println("Null pointer when searching for human flee path");
+      return false;
+    }
+    if (fleePath == null) return false;
     if (fleePath.size() <= FLEE_DIST) {
       fleeMovement();
       return true;
@@ -75,6 +96,13 @@ class Human extends Entity {
       return;
     }
     if (fleePath == null | fleePath.size() < 2) return;
+    
+    // If touching player
+    if (path == null) return;
+    if (path.size() <= 1) {
+      onTargetCollision();
+      return;
+    }
 
     // Kinematic movement based on next node in A*
     AStarNode nextNode = fleePath.get(0);
@@ -92,6 +120,8 @@ class Human extends Entity {
     PVector newPosition = position.copy();
     newPosition.add(velocity);
     
+    orientation = atan2(velocity.y, velocity.x);
+    
     if (!isWalkable(newPosition)) {
       //position.add(velocity.mult(-1));
       return;
@@ -101,11 +131,15 @@ class Human extends Entity {
   }
   
   void move() {
-    if (!flee) super.move();
+    if (flee()) {
+      flee = true;
+    } else {
+      flee = false;
+      super.move();
+    }
   }
   
   void onTargetCollision() {
-    System.out.println("Human died.");
     isRescued = true;
     destroy();
   }

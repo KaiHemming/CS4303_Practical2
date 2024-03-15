@@ -6,8 +6,8 @@ class Entity {
   Tile patrolTarget;
   int scoreValue = 1;
   color primaryColour = #FF0000;
-  int size = 20;
-  int speed = 1;
+  int size = displayHeight/52;
+  float speed = 1.75;
   int visionTime = 300;
   boolean detectedTarget = false;
   boolean isDead = false;
@@ -38,14 +38,32 @@ class Entity {
     if (pathFindingCountDown <= 0) {
       clearPath();
       int[] robotCoords = getTilePos();
-      int[] targetCoords = getTargetCoords();
-      ArrayList<AStarNode> result = pathFinder.search(robotCoords[1], robotCoords[0], targetCoords[1], targetCoords[0]);
-      if (result != null) {
-        path = result;
-      } else {
-        path = null;
+      //int[] targetCoords = getTargetCoords();
+      int[] allTargetCoords = getTargetCoords();
+      int[] targetCoords = new int[2];
+      for (int i = 0; i < allTargetCoords.length; i+=2) {
+        if (targetCoords[0] == 0) {
+          targetCoords[0] = allTargetCoords[i];
+          targetCoords[1] = allTargetCoords[i+1];
+        } else {
+          if (dist(robotCoords[1], robotCoords[0], targetCoords[1], targetCoords[0]) > dist(robotCoords[1], robotCoords[0], allTargetCoords[i], allTargetCoords[i+1])) {
+            targetCoords[0] = allTargetCoords[i];
+            targetCoords[1] = allTargetCoords[i+1];
+          }
+        }
       }
-      pathFindingCountDown = SEARCH_UPDATE_SPEED;
+      try {
+        ArrayList<AStarNode> result = pathFinder.search(robotCoords[1], robotCoords[0], targetCoords[1], targetCoords[0]);
+        if (result != null) {
+          path = result;
+        } else {
+          path = null;
+        }
+        pathFindingCountDown = SEARCH_UPDATE_SPEED;
+      } catch (NullPointerException e) {
+        System.out.println("Null pointer when searching for " + this + "'s path moving elsewhere");
+        stage.placeEntity(this);
+      }
     }
     if (DEBUG) {
       if (path != null) {
@@ -149,6 +167,12 @@ class Entity {
   }
   
   void patrol() {
+    if (!isWalkable(position)) {
+      if (path!=null) {
+        position.x = path.get(path.size()).getCol() * stage.TILE_SIZE;
+        position.y = path.get(path.size()).getRow() * stage.TILE_SIZE;
+      }
+    }
     velocity.x = cos(orientation);
     velocity.y = sin(orientation);
     velocity.mult(speed);
@@ -234,6 +258,8 @@ class Entity {
     velocity.normalize();
     velocity.mult(speed);
     position.add(velocity);
+    
+    orientation = atan2(velocity.y, velocity.x);
   }
   void clearPath() {
     if (path != null) {

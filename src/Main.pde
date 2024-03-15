@@ -1,4 +1,4 @@
-final boolean DEBUG = false;
+final boolean DEBUG = false; // Set to true for debug mode, draws paths and areas, allows reset with spacebar
 // Game Elements
 boolean hasLost = false;
 boolean hasStarted = false;
@@ -21,10 +21,11 @@ boolean isShootingUp = false;
 boolean isShootingDown = false;
 
 // Wave Data
+int waveNumber = 1;
 int numHumans = 1;
 int numRobots = 2;
-int numHunters = 1;
-int numInfectious = 1;
+int numHunters = 0;
+int numInfectious = 0;
 int INITIAL_NUM_HUMANS = numHumans;
 int INITIAL_NUM_ROBOTS = numRobots;
 int INITIAL_NUM_HUNTERS = numHunters;
@@ -43,13 +44,23 @@ void reset() {
   numRobots = INITIAL_NUM_ROBOTS;
   numHunters = INITIAL_NUM_HUNTERS;
   numInfectious = INITIAL_NUM_INFECTIOUS;
+  waveNumber = 0;
   hud.reset();
   player.reset();
   nextWave();
 }
 void nextWave() {
+  player.bullets.clear();
+  waveNumber++;
   stage = new Stage(10, 7, powerUpChance);
+  numRobots = constrain(numRobots+2, INITIAL_NUM_ROBOTS, 40);
+  numHumans = constrain(numHumans + waveNumber%2, INITIAL_NUM_HUMANS, 5);
+  numHunters = constrain(numHunters + waveNumber%2, INITIAL_NUM_HUNTERS, 5);
+  numInfectious = constrain(numInfectious + waveNumber%3, INITIAL_NUM_INFECTIOUS, 7);
+  System.out.println("WAVE DATA\n");
+  System.out.println("numRobots: " + numRobots + ", numHumans: " + numHumans + ", numHunters: " + numHunters + ", numInfectious: " + numInfectious);
   stage.spawnWave(numRobots, numHumans, numHunters, numInfectious);
+  hud.indicateWaveEnd("Wave " + waveNumber);
 }
 void render() {
   background(0);
@@ -95,7 +106,6 @@ void draw() {
   else {
     render();
   }
-  //render();
 }
 void keyPressed() {
   if (key == CODED) {
@@ -163,9 +173,12 @@ void keyReleased() {
       case ' ':
         if (!hasStarted) {
           hasStarted = true;
-        } else {
+        } else if (hasLost) {
           hasLost = false;
           reset();
+        } else {
+          hasLost = false;
+          if (DEBUG) reset();
         }
         break;
     }

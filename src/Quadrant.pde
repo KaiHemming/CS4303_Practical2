@@ -1,6 +1,6 @@
 class Quadrant implements Comparable<Quadrant> {
   boolean spawnedHuman = false;
-  final double HAZARD_CHANCE = 0.005;
+  final double HAZARD_CHANCE = 0.01;
   Stage stage;
   int x, y;
   int absoluteX, absoluteY;

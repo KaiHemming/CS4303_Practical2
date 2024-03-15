@@ -75,7 +75,6 @@ class Stage {
         quadrant.placePowerUp();
       }
     }
-    System.out.println(quadrants);
     halls = miner.dig(quadrants, this);
     placePlayer(player);
     print("done\n");
@@ -143,7 +142,8 @@ class Stage {
   }
   
   boolean draw() {
-    if (robots.isEmpty()) {
+    // End wave if there are no more robots or humans. 
+    if (robots.isEmpty() & humans.isEmpty()) {
       return true;
     }
     for (Tile[] row: grid) {
@@ -156,7 +156,12 @@ class Stage {
     // Remove robots
     ArrayList<Entity> removeRobots = new ArrayList<Entity>();
     for (Entity robot:robots) {
-      robot.draw();
+      try {
+        robot.draw();
+      } catch (Exception e) {
+        System.out.println("Issue drawing entity " + robot + ", destroying...");
+        removeRobots.add(robot);
+      }
       if (robot.isDead) { 
         removeRobots.add(robot);
       }

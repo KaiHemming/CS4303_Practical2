@@ -1,6 +1,6 @@
 class Player {
   final int LIVES = 1;
-  final int SIZE = 20;
+  final int SIZE = displayHeight/52;
   final color PRIMARY_COLOUR = #07D5DE;
   final color SECONDARY_COLOUR = #B2B0B0;
   final int SPEED = 3;
@@ -13,8 +13,8 @@ class Player {
   ArrayList<Quadrant> exploredQuadrants = new ArrayList<Quadrant>();
   ArrayList<Corridor> exploredCorridors = new ArrayList<Corridor>();
   float bulletSpeed = 8f;
-  int shootCooldown = 20;
-  int curShootCooldown = 20;
+  int shootCooldown = 50;
+  int curShootCooldown = 0;
   void reset() {
     lives = LIVES;
     exploredQuadrants.clear();
@@ -51,8 +51,11 @@ class Player {
     } else {
       fill(PRIMARY_COLOUR);
     }
+    strokeWeight(3);
     stroke(1);
     circle(position.x, position.y, SIZE);
+    strokeWeight(1);
+    noStroke();
     
     if (curShootCooldown > 0) curShootCooldown--;
     if (invincibilityTimer > 0) invincibilityTimer--;
