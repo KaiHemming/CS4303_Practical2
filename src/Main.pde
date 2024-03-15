@@ -5,7 +5,7 @@ boolean hasStarted = false;
 LoseScreen loseScreen = new LoseScreen();
 TitleScreen titleScreen = new TitleScreen();
 Stage stage;
-Player player = new Player();
+Player player;
 HUD hud;
 
 // Movement
@@ -35,6 +35,7 @@ double powerUpChance = 0.3;
 void setup() {
   fullScreen();
   noCursor();
+  player = new Player();
   stage = new Stage(8, 5, powerUpChance);
   hud = new HUD(player);
   stage.spawnWave(numRobots, numHumans, numHunters, numInfectious);
