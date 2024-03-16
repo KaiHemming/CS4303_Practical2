@@ -13,7 +13,6 @@ class Human extends Entity {
     scoreValue = SCORE_VALUE;
   }
   
-  // TODO: Flee
   void patrol() {
     if (flee()) {
       flee = true;
@@ -28,7 +27,7 @@ class Human extends Entity {
     if (flee) {
       stroke(#FF0000);
     } else {
-      stroke(#86FFA7);
+      stroke(255);
     }
     fill(primaryColour);
     circle(position.x, position.y, size);
